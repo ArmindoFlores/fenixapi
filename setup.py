@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="fenixapi",
-    version="0.0.1",
+    version="0.0.2",
     author="Francisco Rodrigues",
     author_email="francisco.rodrigues0908@gmail.com",
     description="An API to interface with fenix.tecnico.ulisboa.pt",
