@@ -91,13 +91,13 @@ Authentication required."""
 
     def get_course(self):
         """Returns the user's course"""
-        s = sess.get("student")
+        s = self.get("student")
         return s.h3.contents[0].strip()
 
     def get_courses(self):
         """Returns every course the user is enrolled in"""
         courses = []
-        s = sess.get("student")
+        s = self.get("student")
         tables = s.table
         cs = tables.findAll("h4", {"class": "mtop025"})
         for c in cs:
