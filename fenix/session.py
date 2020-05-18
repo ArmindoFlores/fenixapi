@@ -1,6 +1,8 @@
 import requests
+import datetime
 from bs4 import BeautifulSoup
 from .exceptions import *
+from operator import itemgetter
 
 __all__ = [
     "Session"
@@ -118,5 +120,35 @@ one of the user's courses"""
                         if l[0].text == f"ist{istid}":
                             return l[2].text.strip()
         raise NotFoundError(f"Couldn't find user ist{istid}")
+
+    def get_tests(self):
+        url = "/student/enroll/evaluations"
+        soup = self.get(url)
+        table = soup.find("table", {"class": "evallist"})
+        tests = []
+        tr = table.findAll("tr")
+        for cell in tr:
+            type_ = cell.find("td")
+            if type_ == None:
+                continue
+            type_ = type_.getText()
+            if type_ == "Exame" or type_ == "Teste":
+                test = []
+                c = 0
+                for td in cell.findAll("td"):
+                    if c == 4:
+                        break
+                    if c != 3:
+                        test.append(td.getText().strip())
+                    else:
+                        date_string = td.getText().strip().split(" ")[0]
+                        date_list = date_string.split("/")
+                        date_list.reverse()
+                        number = int(''.join(date_list))
+                        test.append(number)
+                    c += 1
+                tests.append(test)
+        tests = sorted(tests, key = itemgetter(3))
+        return tests
     
 
